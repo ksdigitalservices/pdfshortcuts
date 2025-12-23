@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PAN Card Services Online | Apply for PAN Card</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f8f9fa;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+      padding: 20px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 6px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    .form-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .form-actions {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background-color: #007bff;
+      color: #fff;
+    }
+    .btn-success {
+      background-color: #28a745;
+      color: #fff;
+    }
+    .details-textarea {
+      min-height: 80px;
+      font-size: 16px;
+    }
+    .counter {
+      text-align: right;
+      font-size: 14px;
+      color: #666;
+    }
+    #inputStatus {
+      text-align: center;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    .success { color: green; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Textarea Input Card -->
+    <div class="card">
+      <div>
+        <label for="userDetailsInput"><strong>Paste Your Details (CSV Format):</strong></label>
+        <textarea id="userDetailsInput" class="details-textarea" placeholder="e.g. LastName,FirstName,DOB,Phone,..."></textarea>
+        <div class="counter">Characters: <span id="charCount">0</span></div>
+        <div id="inputStatus"></div>
+      </div>
+    </div>
+
+    <!-- Form Card -->
+    <div class="card">
+      <form id="panApplicationForm" autocomplete="on">
+
+        <!-- 🟢 Buttons moved to top -->
+        <div class="form-actions">
+          <button type="button" class="btn btn-primary" id="fillBtn"><i class="fas fa-magic"></i> Fill Form</button>
+          <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane"></i> Submit</button>
+        </div>
+
+       <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+        <!-- Other Inputs -->
+        <div class="form-section">
+          <div class="form-group">
+            <label for="lastName">Last Name / Surname</label>
+            <input type="text" id="lastName" name="lastName" autocomplete="family-name">
+          </div>
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" name="firstName" autocomplete="given-name">
+          </div>
+			 <!-- Date of Birth Field -->
+        <div class="form-group">
+          <label for="date_of_birth_reg">Date of Birth</label>
+          <input id="date_of_birth_reg" name="dateOfBirth" type="text" class="form-control" onkeypress="return event.keyCode !== 13;" autocomplete="on" />
+        </div>
+          <div class="form-group">
+            <label for="phone">Mobile Number</label>
+            <input type="tel" id="phone" name="rvContactNo" autocomplete="tel">
+          </div>
+          <div class="form-group">
+            <label for="aadhaarNo_1">Aadhaar First 8 Digits</label>
+            <input type="text" id="aadhaarNo_1" name="rvAadhaarNum_first" maxlength="8">
+          </div>
+          <div class="form-group">
+            <label for="aadhaarNo_2">Aadhaar Last 4 Digits</label>
+            <input type="text" id="aadhaarNo_2" name="rvAadhaarNum_sec" maxlength="4">
+          </div>
+          <div class="form-group">
+            <label for="rvNameAadhaar_id">Name as per Aadhaar</label>
+            <input type="text" id="rvNameAadhaar_id" name="rvNameAadhaar">
+          </div>
+          <div class="form-group">
+            <label for="fal_name">Father's Last Name</label>
+            <input type="text" id="fal_name" name="rvFatherLastname">
+          </div>
+          <div class="form-group">
+            <label for="faf_name">Father's First Name</label>
+            <input type="text" id="faf_name" name="rvFatherFirstname">
+          </div>
+          <div class="form-group">
+            <label for="rCountry">District</label>
+            <input type="text" id="rCountry" name="rvResaddCity">
+          </div>
+          <div class="form-group">
+            <label for="res_pin_code">Pincode</label>
+            <input type="text" id="res_pin_code" name="rvResaddPin" maxlength="6">
+          </div>
+          <div class="form-group">
+            <label for="rFlat">House Number</label>
+            <input type="text" id="rFlat" name="rvResaddFlat">
+          </div>
+          <div class="form-group">
+            <label for="rName">Street</label>
+            <input type="text" id="rName" name="rvResaddBuilding">
+          </div>
+          <div class="form-group">
+            <label for="rRoad">VTC</label>
+            <input type="text" id="rRoad" name="rvResaddPostoffice">
+          </div>
+          <div class="form-group">
+            <label for="rArea">Locality</label>
+            <input type="text" id="rArea" name="rvResaddLocality">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer style="text-align:center; padding:20px; margin-top:20px; font-size:14px; color:#666;">
+    &copy; 2025 PAN Card Services. All rights reserved.
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const userDetailsInput = document.getElementById('userDetailsInput');
+      const charCount = document.getElementById('charCount');
+      const inputStatus = document.getElementById('inputStatus');
+      const fillBtn = document.getElementById('fillBtn');
+      const form = document.getElementById('panApplicationForm');
+
+      userDetailsInput.addEventListener('input', function () {
+        charCount.textContent = userDetailsInput.value.length;
+      });
+
+      function showStatus(message, type) {
+        inputStatus.textContent = message;
+        inputStatus.className = type;
+        setTimeout(() => {
+          inputStatus.textContent = '';
+          inputStatus.className = '';
+        }, 5000);
+      }
+
+      fillBtn.addEventListener('click', function () {
+        const inputText = userDetailsInput.value.trim();
+        if (!inputText) {
+          showStatus('Please enter user details.', 'error');
+          return;
+        }
+
+        const values = inputText.split(',').map(val => val.trim());
+        if (values.length !== 15) {
+          showStatus('Expected 15 comma-separated values.', 'error');
+          return;
+        }
+
+        document.getElementById('lastName').value = values[0];
+        document.getElementById('firstName').value = values[1];
+        document.getElementById('date_of_birth_reg').value = values[2];
+        document.getElementById('phone').value = values[3];
+        document.getElementById('aadhaarNo_1').value = values[4];
+        document.getElementById('aadhaarNo_2').value = values[5];
+        document.getElementById('rvNameAadhaar_id').value = values[6];
+        document.getElementById('fal_name').value = values[7];
+        document.getElementById('faf_name').value = values[8];
+        document.getElementById('rCountry').value = values[9];
+        document.getElementById('res_pin_code').value = values[10];
+        document.getElementById('rFlat').value = values[11];
+        document.getElementById('rName').value = values[12];
+        document.getElementById('rRoad').value = values[13];
+        document.getElementById('rArea').value = values[14];
+
+        showStatus('Form filled successfully.', 'success');
+      });
+
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        showStatus('Form submitted successfully!', 'success');
+        // Submit logic or data handling here
+      });
+    });
+  </script>
+</body>
+</html>

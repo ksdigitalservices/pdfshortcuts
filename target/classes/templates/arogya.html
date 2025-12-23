@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Rajiv Aarogyasri Card</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+}
+
+/* CARD */
+.card {
+    width: 900px;
+    margin: 20px auto;
+    background: #fff;
+    border: 2px solid #2e7d32;
+    padding: 15px;
+    position: relative;
+}
+
+/* WATERMARK */
+.card::after {
+    content: "";
+    position: absolute;
+    top: 290px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 200px;
+    background: url("/logo3.jpg") no-repeat center;
+    background-size: contain;
+    opacity: 0.30;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.card-content {
+    position: relative;
+    z-index: 1;
+}
+
+/* HEADER */
+.header-container {
+    position: relative;
+    text-align: center;
+}
+
+.header-container img {
+    width: 100%;
+    max-height: 190px;
+    object-fit: contain;
+}
+
+/* CARD NUMBER BOX */
+.card-number-box {
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.card-number-box input {
+    width: 18ch;
+    height: 36px;
+    border: 2px solid #000;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    background: #fff; /* keep card number solid */
+}
+
+/* TABLE – SHRINK TO CONTENT */
+table {
+    width: auto;
+    border-collapse: collapse;
+    margin: 15px auto;
+    table-layout: fixed;
+}
+
+/* TABLE HEADER – GREEN BORDER ONLY */
+th {
+    border: 1px solid #2e7d32;
+    background: none;
+    color: #000000;
+    padding: 8px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+/* BODY */
+td {
+    border: none;
+    padding: 5px;
+    text-align: center;
+}
+
+/* HEADER COLUMN WIDTHS */
+.th-cardno { width: 14ch; }
+.th-mid    { width: 4ch; }
+.th-name   { width: 30ch; }
+.th-gender { width: 3ch; }
+.th-dob    { width: 14ch; }
+
+/* INPUTS */
+td input {
+    border: none;
+    outline: none;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* 🔑 IMPORTANT FIX: TRANSPARENT INPUTS OVER WATERMARK */
+#memberTable td input {
+    background-color: transparent;
+    color: #000;
+}
+
+/* INPUT WIDTHS */
+.input-cardno { width: 12ch; }
+.input-mid    { width: 2ch; }
+.input-name   { width: 44ch; text-align: left; }
+.input-gender { width: 2ch; }
+.input-dob    { width: 10ch; }
+
+/* BUTTONS */
+.buttons {
+    width: 900px;
+    margin: 10px auto;
+    text-align: right;
+}
+
+.buttons button {
+    padding: 6px 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+@media print {
+    body { background: none; }
+    .buttons { display: none; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+<div class="card-content">
+
+<!-- HEADER -->
+<div class="header-container">
+    <img src="/arogyatemplate.jpg" alt="Header">
+    <div class="card-number-box">
+        <input type="text" id="cardNumberInput" maxlength="12">
+    </div>
+</div>
+
+<!-- TABLE -->
+<table id="memberTable">
+<thead>
+<tr>
+    <th class="th-cardno">CARD NUMBER</th>
+    <th class="th-mid">M.ID</th>
+    <th class="th-name">MEMBER NAME</th>
+    <th class="th-gender">GENDER</th>
+    <th class="th-dob">DATE OF BIRTH</th>
+</tr>
+</thead>
+<tbody>
+<script>
+for (let i = 1; i <= 8; i++) {
+    document.write(`
+    <tr>
+        <td><input class="input-cardno card-col" maxlength="12"></td>
+        <td><input class="input-mid" maxlength="2" value="${String(i).padStart(2,'0')}"></td>
+        <td><input class="input-name" maxlength="50"></td>
+        <td><input class="input-gender" maxlength="1"></td>
+        <td><input class="input-dob" maxlength="10"></td>
+    </tr>
+    `);
+}
+</script>
+</tbody>
+</table>
+
+</div>
+</div>
+
+<!-- BUTTONS -->
+<div class="buttons">
+    <button onclick="addRow()">Add Row</button>
+    <button onclick="removeRow()">Remove Row</button>
+</div>
+
+<script>
+const cardInput = document.getElementById("cardNumberInput");
+
+/* SYNC CARD NUMBER */
+cardInput.addEventListener("input", () => {
+    document.querySelectorAll(".card-col").forEach(el => {
+        el.value = cardInput.value;
+    });
+});
+
+/* ADD ROW */
+function addRow() {
+    const rows = document.querySelectorAll("#memberTable tbody tr");
+    for (let i = 0; i < rows.length; i++) {
+        const cardCell = rows[i].querySelector(".card-col");
+        const midCell  = rows[i].querySelector(".input-mid");
+
+        if (cardCell.value.trim() === "") {
+            cardCell.value = cardInput.value;
+            midCell.value = String(i + 1).padStart(2, '0');
+            break;
+        }
+    }
+}
+
+/* REMOVE ROW */
+function removeRow() {
+    const rows = document.querySelectorAll("#memberTable tbody tr");
+    for (let i = rows.length - 1; i >= 0; i--) {
+        const inputs = rows[i].querySelectorAll("input");
+        const hasData = Array.from(inputs).some(inp => inp.value.trim() !== "");
+
+        if (hasData) {
+            inputs.forEach(inp => inp.value = "");
+            break;
+        }
+    }
+}
+</script>
+
+</body>
+</html>

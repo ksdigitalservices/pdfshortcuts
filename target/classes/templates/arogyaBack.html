@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image with Center Watermark</title>
+
+    <style>
+        body {
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+            font-family: Arial, sans-serif;
+        }
+
+        /* MAIN IMAGE CONTAINER */
+        .image-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* MAIN IMAGE */
+        .image-container img.main-image {
+            width: 800px;              /* adjust if needed */
+            height: auto;
+            display: block;
+        }
+
+        /* WATERMARK */
+        .image-container img.watermark {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 350px; 
+			height: 300px;             /* watermark size */
+            opacity: 0.20;             /* transparency */
+            pointer-events: none;      /* clicks pass through */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="image-container">
+        <!-- Main Image -->
+        <img src="arogyaback1.JPG" alt="Main Image" class="main-image">
+
+        <!-- Watermark Logo -->
+        <img src="watermark.jpg" alt="Watermark" class="watermark">
+    </div>
+
+</body>
+</html>

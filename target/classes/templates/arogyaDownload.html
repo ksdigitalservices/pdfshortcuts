@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Rajiv Aarogyasri Card</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+}
+
+/* ================= CARD ================= */
+.card {
+    width: 900px;
+    margin: 20px auto;
+    background: #fff;
+    border: 2px solid #2e7d32;
+    padding: 15px;
+    position: relative;
+}
+
+.card-content {
+    position: relative;
+    z-index: 1;
+}
+
+/* ================= HEADER ================= */
+.header-main {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 18px;
+}
+
+/* Left logo */
+.left-logo img {
+    height: 70px;
+    margin-left: 30px;
+}
+
+/* Text block */
+.text-block {
+    text-align: center;
+    line-height: 1.25;
+}
+
+.text-block h1 {
+    margin: 0;
+    font-size: 30px;
+    font-weight: bold;
+    color: #1a237e;
+}
+
+.text-block h2 {
+    margin: 1px 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #1b7f3a;
+}
+
+.text-block h3 {
+    margin: 1px 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #c62828;
+}
+
+/* ================= CARD NUMBER ================= */
+.card-number-box {
+    position: relative;
+    top: 25px;
+    left: 44px;
+}
+
+.card-number-box input {
+    width: 260px;
+    height: 45px;
+    border: 2px solid #333;
+    border-radius: 999px;
+    padding: 0 20px;
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+    outline: none;
+    background-color: #fff;
+}
+
+/* ================= RIGHT LOGOS ================= */
+.right-logos {
+    margin-top: 1px;
+    margin-left: -15px;
+}
+
+.right-top {
+    display: flex;
+    gap: 2px;
+}
+
+.logo2-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.logo2-stack img:first-child { height: 70px; }
+.logo2-stack img:last-child  { height: 78px; }
+
+.right-top > img { height: 75px; }
+
+/* ================= PERSON ROW ================= */
+.bottom-row {
+    display: flex;
+    gap: 16px;
+    margin-top: -60px;
+}
+
+.person {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    font-size: 8px;
+}
+
+.person img {
+    height: 80px;
+    border-radius: 4px;
+    margin-top: -10px;
+}
+
+.person-text strong {
+    display: block;
+    font-size: 8px;
+    font-weight: 600;
+}
+
+.person-left { margin-left: 70px; }
+
+/* ================= TABLE ================= */
+table {
+    border-collapse: collapse;
+    margin: 15px auto;
+}
+
+th {
+    border: 1px solid #2e7d32;
+    padding: 8px;
+    font-weight: bold;
+}
+
+td {
+    padding: 5px;
+    text-align: center;
+}
+
+.th-cardno { width: 14ch; }
+.th-mid    { width: 4ch; }
+.th-name   { width: 30ch; }
+.th-gender { width: 3ch; }
+.th-dob    { width: 14ch; }
+
+/* ===== WATERMARK ===== */
+#memberTable {
+    position: relative;
+}
+
+#memberTable::after {
+    content: "";
+    position: absolute;
+    top: 90px;
+    left: 290px;
+    width: 200px;
+    height: 150px;
+    background: url("logo2.jpg") no-repeat center;
+    background-size: contain;
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+/* Inputs */
+td input {
+    border: none;
+    outline: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: transparent;
+}
+
+/* ================= BUTTONS ================= */
+.buttons {
+    width: 900px;
+    margin: 10px auto;
+    text-align: right;
+}
+
+.buttons button {
+    padding: 6px 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* hide buttons during download */
+.hide-for-download {
+    display: none !important;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+<div class="card-content">
+
+<!-- HEADER -->
+<div class="header-main">
+    <div class="left-logo">
+        <img src="logo1.png">
+    </div>
+
+    <div class="text-block">
+        <h1>GOVERNMENT OF TELANGANA</h1>
+        <h2>RAJIV AAROGYASRI HEALTH CARE TRUST</h2>
+        <h3>AYUSHMAN BHARAT PRADHAN MANTRI JAN AROGYA YOJANA</h3>
+        <h3>RAJIV AAROGYASRI</h3>
+
+        <div class="card-number-box">
+            <input type="text" id="cardNumberInput" maxlength="12">
+        </div>
+    </div>
+
+    <div class="right-logos">
+        <div class="right-top">
+            <div class="logo2-stack">
+                <img src="logo2.jpg">
+                <img src="logo6.jpg">
+            </div>
+            <img src="logo3.png">
+        </div>
+    </div>
+</div>
+
+<div class="bottom-row">
+    <div class="person person-left">
+        <img src="logo4.png">
+        <div class="person-text">
+            <strong>Sri. Anumula Revanth Reddy</strong>
+            Hon’ble Chief Minister
+        </div>
+    </div>
+
+    <div class="person">
+        <img src="logo5.jpeg">
+        <div class="person-text">
+            <strong>Sri. Damodar Raja Narasimha</strong>
+            Hon’ble Minister of Health
+        </div>
+    </div>
+</div>
+
+<!-- TABLE -->
+<table id="memberTable">
+<thead>
+<tr>
+    <th class="th-cardno">CARD NUMBER</th>
+    <th class="th-mid">M.ID</th>
+    <th class="th-name">MEMBER NAME</th>
+    <th class="th-gender">GENDER</th>
+    <th class="th-dob">DATE OF BIRTH</th>
+</tr>
+</thead>
+<tbody>
+<script>
+for (let i = 1; i <= 8; i++) {
+document.write(`
+<tr>
+<td><input class="card-col"></td>
+<td><input value="${String(i).padStart(2,'0')}"></td>
+<td><input></td>
+<td><input></td>
+<td><input></td>
+</tr>
+`);
+}
+</script>
+</tbody>
+</table>
+
+</div>
+</div>
+
+<!-- BUTTONS -->
+<div class="buttons">
+    <button onclick="addRow()">Add Row</button>
+    <button onclick="removeRow()">Remove Row</button>
+    <button onclick="downloadCard()">Download Card</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+const cardInput = document.getElementById("cardNumberInput");
+
+cardInput.addEventListener("input", () => {
+    document.querySelectorAll(".card-col").forEach(el => {
+        el.value = cardInput.value;
+    });
+});
+
+function addRow() {
+    const rows = document.querySelectorAll("#memberTable tbody tr");
+    for (let i = 0; i < rows.length; i++) {
+        const card = rows[i].querySelector(".card-col");
+        if (card.value.trim() === "") {
+            card.value = cardInput.value;
+            rows[i].children[1].firstChild.value =
+                String(i + 1).padStart(2, '0');
+            break;
+        }
+    }
+}
+
+function removeRow() {
+    const rows = document.querySelectorAll("#memberTable tbody tr");
+    for (let i = rows.length - 1; i >= 0; i--) {
+        const inputs = rows[i].querySelectorAll("input");
+        if ([...inputs].some(inp => inp.value.trim() !== "")) {
+            inputs.forEach(inp => inp.value = "");
+            break;
+        }
+    }
+}
+
+function downloadCard() {
+    const card = document.querySelector(".card");
+    const buttons = document.querySelector(".buttons");
+    const cardNumber = cardInput.value.trim();
+
+    const fileName = cardNumber
+        ? `Aarogyasri_Card_${cardNumber}.png`
+        : "Aarogyasri_Card.png";
+
+    buttons.classList.add("hide-for-download");
+
+    html2canvas(card, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff"
+    }).then(canvas => {
+        const link = document.createElement("a");
+        link.download = fileName;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+        buttons.classList.remove("hide-for-download");
+    });
+}
+</script>
+
+</body>
+</html>
