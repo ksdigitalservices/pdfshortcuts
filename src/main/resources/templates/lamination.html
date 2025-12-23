@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Printer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .upload-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .upload-area {
+            background: white;
+            border: 3px dashed #cbd5e1;
+            border-radius: 12px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .upload-area:hover {
+            border-color: #94a3b8;
+            background: #f8fafc;
+        }
+        
+        .upload-placeholder {
+            text-align: center;
+            color: #64748b;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .upload-placeholder svg {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 16px;
+            color: #94a3b8;
+        }
+        
+        .upload-placeholder h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .upload-placeholder p {
+            font-size: 14px;
+        }
+        
+        .preview-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .preview-image {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 4px;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .print-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .print-btn:hover {
+            background: #2563eb;
+        }
+        
+        .print-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .clear-btn {
+            background: #f1f5f9;
+            color: #64748b;
+            border: 2px solid #e2e8f0;
+            padding: 14px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .clear-btn:hover {
+            background: #e2e8f0;
+        }
+        
+        /* PRINT STYLES - COMPLETELY SEPARATE */
+        .print-page {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+        }
+        
+        .print-content {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 30px;
+            padding: 40px;
+            background: white;
+            min-height: 100vh;
+            width: 100%;
+            page-break-inside: avoid;
+        }
+        
+        .print-image {
+            width: 48%;
+            height: auto;
+            max-height: 90vh;
+            object-fit: contain;
+            border: 1px solid #ddd;
+            page-break-inside: avoid;
+        }
+        
+        @media print {
+            /* Hide everything during print */
+            body * {
+                display: none !important;
+            }
+            
+            /* Show only print page */
+            .print-page,
+            .print-page * {
+                display: block !important;
+                visibility: visible !important;
+            }
+            
+            .print-page {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                background: white;
+            }
+            
+            .print-content {
+                display: flex !important;
+                flex-direction: row !important;
+                justify-content: space-around !important;
+                align-items: flex-start !important;
+                gap: 20px !important;
+                padding: 20px !important;
+                margin: 0 !important;
+                width: 100% !important;
+                min-height: 100vh !important;
+                page-break-inside: avoid !important;
+            }
+            
+            .print-image {
+                width: calc(50% - 10px) !important;
+                max-width: 50% !important;
+                height: auto !important;
+                max-height: 95vh !important;
+                object-fit: contain !important;
+                page-break-inside: avoid !important;
+                page-break-before: avoid !important;
+                page-break-after: avoid !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .upload-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .print-btn,
+            .clear-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Content -->
+    <div class="container">
+        <div class="upload-grid">
+            <!-- First Upload Area -->
+            <div class="upload-area" id="uploadArea1" data-index="0">
+                <input type="file" class="file-input" id="fileInput1" accept="image/*">
+                
+                <div class="upload-placeholder" id="placeholder1">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <h3>Upload Image 1</h3>
+                    <p>Click or drag to upload</p>
+                </div>
+                
+                <div class="preview-container" id="previewContainer1" style="display: none;">
+                    <img class="preview-image" id="previewImage1" alt="Preview 1">
+                </div>
+            </div>
+            
+            <!-- Second Upload Area -->
+            <div class="upload-area" id="uploadArea2" data-index="1">
+                <input type="file" class="file-input" id="fileInput2" accept="image/*">
+                
+                <div class="upload-placeholder" id="placeholder2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <h3>Upload Image 2</h3>
+                    <p>Click or drag to upload</p>
+                </div>
+                
+                <div class="preview-container" id="previewContainer2" style="display: none;">
+                    <img class="preview-image" id="previewImage2" alt="Preview 2">
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="print-btn" id="printBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                </svg>
+                Print Images
+            </button>
+            
+            <button class="clear-btn" id="clearBtn">Clear All</button>
+        </div>
+    </div>
+    
+    <!-- Separate Print Page (Always in DOM but hidden) -->
+    <div class="print-page" id="printPage">
+        <div class="print-content" id="printContent">
+            <!-- Images will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadAreas = [document.getElementById('uploadArea1'), document.getElementById('uploadArea2')];
+            const fileInputs = [document.getElementById('fileInput1'), document.getElementById('fileInput2')];
+            const placeholders = [document.getElementById('placeholder1'), document.getElementById('placeholder2')];
+            const previewContainers = [document.getElementById('previewContainer1'), document.getElementById('previewContainer2')];
+            const previewImages = [document.getElementById('previewImage1'), document.getElementById('previewImage2')];
+            const printBtn = document.getElementById('printBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const printPage = document.getElementById('printPage');
+            const printContent = document.getElementById('printContent');
+            
+            let uploadedImages = [null, null];
+            
+            // Setup each upload area
+            uploadAreas.forEach((area, index) => {
+                area.addEventListener('click', (e) => {
+                    if (!previewContainers[index].style.display || previewContainers[index].style.display === 'none') {
+                        fileInputs[index].click();
+                    }
+                });
+                
+                fileInputs[index].addEventListener('change', (e) => {
+                    handleFileSelect(e, index);
+                });
+            });
+            
+            function handleFileSelect(event, index) {
+                const file = event.target.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    displayImage(file, index);
+                }
+            }
+            
+            function displayImage(file, index) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImages[index] = {
+                        file: file,
+                        dataUrl: e.target.result
+                    };
+                    
+                    previewImages[index].src = e.target.result;
+                    previewContainers[index].style.display = 'flex';
+                    placeholders[index].style.display = 'none';
+                    
+                    previewImages[index].onload = function() {
+                        const img = previewImages[index];
+                        fitImageToContainer(img, previewContainers[index]);
+                    };
+                };
+                reader.readAsDataURL(file);
+            }
+            
+            function fitImageToContainer(img, container) {
+                const containerWidth = container.clientWidth - 40;
+                const containerHeight = container.clientHeight - 40;
+                
+                const imgRatio = img.naturalWidth / img.naturalHeight;
+                const containerRatio = containerWidth / containerHeight;
+                
+                if (imgRatio > containerRatio) {
+                    img.style.width = '90%';
+                    img.style.height = 'auto';
+                } else {
+                    img.style.width = 'auto';
+                    img.style.height = '90%';
+                }
+            }
+            
+            // FIXED PRINT FUNCTION
+            printBtn.addEventListener('click', function() {
+                // Check if at least one image is uploaded
+                const hasImages = uploadedImages.some(img => img !== null);
+                
+                if (!hasImages) {
+                    alert('Please upload at least one image before printing.');
+                    return;
+                }
+                
+                // Prepare print page
+                preparePrintPage();
+                
+                // Show print page temporarily
+                printPage.style.display = 'block';
+                
+                // Wait a moment to ensure DOM is ready
+                setTimeout(() => {
+                    // Trigger print
+                    window.print();
+                    
+                    // Hide print page after print dialog closes
+                    setTimeout(() => {
+                        printPage.style.display = 'none';
+                        printContent.innerHTML = ''; // Clear print content
+                    }, 100);
+                }, 100);
+            });
+            
+            function preparePrintPage() {
+                // Clear previous print content
+                printContent.innerHTML = '';
+                
+                // Add each image to print content
+                uploadedImages.forEach((imageData, index) => {
+                    if (imageData) {
+                        const printImage = document.createElement('img');
+                        printImage.className = 'print-image';
+                        printImage.alt = `Image ${index + 1}`;
+                        printImage.src = imageData.dataUrl;
+                        
+                        // Set image to load completely before printing
+                        printImage.onload = function() {
+                            console.log(`Image ${index + 1} loaded for printing`);
+                        };
+                        
+                        printContent.appendChild(printImage);
+                    }
+                });
+                
+                // If only one image, center it
+                const imageCount = uploadedImages.filter(img => img !== null).length;
+                if (imageCount === 1) {
+                    printContent.style.justifyContent = 'center';
+                } else {
+                    printContent.style.justifyContent = 'space-around';
+                }
+            }
+            
+            // Clear all functionality
+            clearBtn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to clear all images?')) {
+                    uploadedImages = [null, null];
+                    
+                    uploadAreas.forEach((area, index) => {
+                        fileInputs[index].value = '';
+                        previewContainers[index].style.display = 'none';
+                        placeholders[index].style.display = 'block';
+                    });
+                }
+            });
+            
+            // Image replacement
+            previewContainers.forEach((container, index) => {
+                container.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    fileInputs[index].click();
+                });
+            });
+            
+            // Listen for afterprint event to clean up
+            window.addEventListener('afterprint', function() {
+                printPage.style.display = 'none';
+                printContent.innerHTML = '';
+            });
+            
+            // Also listen for beforeprint to ensure everything is ready
+            window.addEventListener('beforeprint', function() {
+                console.log('Print dialog opening - images should be visible');
+            });
+        });
+    </script>
+</body>
+</html>

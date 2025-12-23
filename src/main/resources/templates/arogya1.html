@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Rajiv Aarogyasri Card</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+}
+
+/* ================= CARD ================= */
+.card {
+    width: 900px;
+    margin: 20px auto;
+    background: #fff;
+    border: 2px solid #2e7d32;
+    padding: 15px;
+    position: relative;
+}
+
+.card-content {
+    position: relative;
+    z-index: 1;
+}
+
+/* ================= HEADER ================= */
+.header-main {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 18px;
+}
+
+/* Left logo */
+.left-logo img {
+    height: 70px;
+	margin-left: 30px;	
+}
+
+/* Text block */
+.text-block {
+    text-align: center;
+    line-height: 1.25;
+}
+
+.text-block h1 {
+    margin: 0;
+    font-size: 30px;
+    font-weight: bold;
+    color: #1a237e;
+}
+
+.text-block h2 {
+    margin: 1px 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #1b7f3a;
+}
+
+.text-block h3 {
+    margin: 1px 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #c62828;
+}
+
+/* ✅ CARD NUMBER – ONLY VISUAL SHIFT */
+.card-number-box {
+    position: relative;
+    top: 25px;
+    left: 44px;
+
+    /* You can keep the div for positioning or layout purposes, but no need to modify the border-radius of this element */
+    width: 100%; /* Optional: Adjust div width as needed */
+    background-color: transparent; /* Ensure the div is invisible */
+}
+
+.card-number-box input {
+    width: 260px; /* Adjust width */
+    height: 45px; /* Adjust height for the pill shape */
+    border: 2px solid #333; /* Border color */
+    border-radius: 999px; /* This makes the edges cylindrical (pill-shaped) */
+    padding: 0 20px; /* Padding inside the input for text spacing */
+    font-size: 16px; /* Text size */
+    text-align: center; /* Text alignment */
+    outline: none; /* Removes the default focus outline */
+    background-color: #fff; /* Background color */
+    box-sizing: border-box; /* Ensures padding doesn't affect total width/height */
+	font-size: 25px; /* Text size set to 12px */
+	font-weight: bold; /* Makes text bold */
+	}
+
+
+/* ================= RIGHT LOGOS ================= */
+.right-logos {
+    margin-top: 1px;
+	margin-left: -15px;
+}
+
+.right-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 2px;
+}
+
+/* logo2 + logo6 stack */
+.logo2-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.logo2-stack img:first-child { height: 70px; }
+.logo2-stack img:last-child  { height: 78px; }
+
+/* logo3 */
+.right-top > img {
+    height: 75px;
+}
+
+/* ================= CM / MINISTER (RESTORED) ================= */
+.bottom-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-top: -60px;
+}
+
+.person {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    font-size: 8px;
+}
+
+.person img {
+    height: 80px;
+    width: auto;
+    border-radius: 4px;
+    margin-bottom: 2px;
+	margin-top: -10px;
+}
+
+.person-text {
+    line-height: 1.05;
+}
+
+.person-text strong {
+    display: block;
+    font-size: 8px;
+    font-weight: 600;
+}
+
+.person-left {
+    margin-left: 70px;
+}
+
+/* ================= TABLE ================= */
+table {
+    width: auto;
+    border-collapse: collapse;
+    margin: 15px auto;
+    table-layout: fixed;
+}
+
+th {
+    border: 1px solid #2e7d32;
+    padding: 8px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+td {
+    border: none;
+    padding: 5px;
+    text-align: center;
+}
+
+/* Column widths */
+.th-cardno { width: 14ch; }
+.th-mid    { width: 4ch; }
+.th-name   { width: 30ch; }
+.th-gender { width: 3ch; }
+.th-dob    { width: 14ch; }
+
+/* ================= WATERMARK BEHIND MEMBER NAME ================= */
+td.name-cell {
+    position: relative;
+}
+
+/* ===== SINGLE WATERMARK BEHIND MEMBER NAME COLUMN ===== */
+#memberTable {
+    position: relative;
+}
+
+#memberTable::after {
+    content: "";
+    position: absolute;
+    top: 90px;                /* vertical position */
+    left: 290px;              /* aligns under MEMBER NAME column */
+    width: 200px;             /* width of MEMBER NAME column */
+    height: 150px;
+    background: url("logo2.jpg") no-repeat center;
+    background-size: contain;
+    opacity: 0.35;            /* 👈 increased opacity */
+    pointer-events: none;
+    z-index: 0;
+}
+
+
+/* Inputs */
+td input {
+    border: none;
+    outline: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: transparent;
+    position: relative;
+    z-index: 1;
+}
+
+.input-cardno { width: 12ch; }
+.input-mid    { width: 2ch; }
+.input-name   { width: 44ch; text-align: left; }
+.input-gender { width: 2ch; }
+.input-dob    { width: 10ch; }
+
+/* ================= BUTTONS ================= */
+.buttons {
+    width: 900px;
+    margin: 10px auto;
+    text-align: right;
+}
+
+.buttons button {
+    padding: 6px 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+@media print {
+    body { background: none; }
+    .buttons { display: none; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+<div class="card-content">
+
+<!-- HEADER -->
+<div class="header-main">
+
+    <div class="left-logo">
+        <img src="logo1.png">
+    </div>
+
+    <div class="text-block">
+        <h1>GOVERNMENT OF TELANGANA</h1>
+        <h2>RAJIV AAROGYASRI HEALTH CARE TRUST</h2>
+        <h3>AYUSHMAN BHARAT PRADHAN MANTRI JAN AROGYA YOJANA</h3>
+        <h3>RAJIV AAROGYASRI</h3>
+
+      <!--  <div class="card-number-box">
+            <input type="text" id="cardNumberInput" maxlength="12">
+        </div>
+		-->
+		
+		<div class="card-number-box">
+		    <input type="text" id="cardNumberInput" maxlength="12" >
+		</div>
+
+    </div>
+
+    <div class="right-logos">
+        <div class="right-top">
+            <div class="logo2-stack">
+                <img src="logo2.jpg">
+                <img src="logo6.jpg">
+            </div>
+            <img src="logo3.png">
+        </div>
+    </div>
+
+</div>
+
+<div class="bottom-row">
+    <div class="person person-left">
+        <img src="logo4.png">
+        <div class="person-text">
+            <strong>Sri. Anumula Revanth Reddy</strong>
+            Hon’ble Chief Minister
+        </div>
+    </div>
+
+    <div class="person">
+        <img src="logo5.jpeg">
+        <div class="person-text">
+            <strong>Sri. Damodar Raja Narasimha</strong>
+            Hon’ble Minister of Health
+        </div>
+    </div>
+</div>
+
+<!-- TABLE -->
+<table id="memberTable">
+<thead>
+<tr>
+    <th class="th-cardno">CARD NUMBER</th>
+    <th class="th-mid">M.ID</th>
+    <th class="th-name">MEMBER NAME</th>
+    <th class="th-gender">GENDER</th>
+    <th class="th-dob">DATE OF BIRTH</th>
+</tr>
+</thead>
+<tbody>
+<script>
+for (let i = 1; i <= 8; i++) {
+document.write(`
+<tr>
+<td><input class="input-cardno card-col"></td>
+<td><input class="input-mid" value="${String(i).padStart(2,'0')}"></td>
+<td class="name-cell"><input class="input-name"></td>
+<td><input class="input-gender"></td>
+<td><input class="input-dob"></td>
+</tr>
+`);
+}
+</script>
+</tbody>
+</table>
+
+</div>
+</div>
+
+<!-- BUTTONS -->
+<div class="buttons">
+<button onclick="addRow()">Add Row</button>
+<button onclick="removeRow()">Remove Row</button>
+</div>
+
+<script>
+const cardInput = document.getElementById("cardNumberInput");
+
+cardInput.addEventListener("input", () => {
+    document.querySelectorAll(".card-col").forEach(el => {
+        el.value = cardInput.value;
+    });
+});
+
+function addRow() {
+    const rows = document.querySelectorAll("#memberTable tbody tr");
+    for (let i = 0; i < rows.length; i++) {
+        const card = rows[i].querySelector(".card-col");
+        if (card.value.trim() === "") {
+            card.value = cardInput.value;
+            rows[i].querySelector(".input-mid").value =
+                String(i + 1).padStart(2, '0');
+            break;
+        }
+    }
+}
+
+function removeRow() {
+    const rows = document.querySelectorAll("#memberTable tbody tr");
+    for (let i = rows.length - 1; i >= 0; i--) {
+        const inputs = rows[i].querySelectorAll("input");
+        if ([...inputs].some(inp => inp.value.trim() !== "")) {
+            inputs.forEach(inp => inp.value = "");
+            break;
+        }
+    }
+}
+</script>
+
+</body>
+</html>

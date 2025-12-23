@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Cropper</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: #fafafa;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .document-types {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .radio-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .radio-group input[type="radio"] {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .radio-group label {
+            font-size: 16px;
+        }
+        
+        .file-upload {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .upload-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .upload-btn:hover {
+            background: #45a049;
+        }
+        
+        .upload-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .file-name {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .preview-section {
+            display: none;
+        }
+        
+        .preview-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .preview-box {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            background: white;
+        }
+        
+        .preview-box img {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            margin-bottom: 10px;
+            background: #f8f8f8;
+        }
+        
+        .file-name-edit {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        
+        .file-name-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .update-btn {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .update-btn:hover {
+            background: #0b7dda;
+        }
+        
+        .download-btn {
+            width: 100%;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .download-btn:hover {
+            background: #45a049;
+        }
+        
+        .status {
+            text-align: center;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        .status.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            display: block;
+        }
+        
+        .status.error {
+            background: #ffebee;
+            color: #c62828;
+            display: block;
+        }
+        
+        .status.info {
+            background: #e3f2fd;
+            color: #1565c0;
+            display: block;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+        
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4CAF50;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .reset-btn {
+            background: #9e9e9e;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+        
+        .reset-btn:hover {
+            background: #757575;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Document Cropper</h1>
+        
+        <!-- Status Message -->
+        <div class="status" id="status"></div>
+        
+        <!-- Document Type Selection -->
+        <div class="section">
+            <div class="section-title">1. Select Document Type</div>
+            <div class="document-types">
+                <div class="radio-group">
+                    <input type="radio" id="aadhar" name="documentType" value="AADHAR_CARD">
+                    <label for="aadhar">Aadhar Card</label>
+                </div>
+                <div class="radio-group">
+                    <input type="radio" id="voter" name="documentType" value="VOTER_ID">
+                    <label for="voter">Voter ID</label>
+                </div>
+                <div class="radio-group">
+                    <input type="radio" id="pan" name="documentType" value="PAN_CARD">
+                    <label for="pan">PAN Card</label>
+                </div>
+            </div>
+			<div class="section-title">2. Upload PDF File</div>
+			            <div class="file-upload">
+			                <input type="file" id="pdfFile" class="file-input" accept=".pdf">
+			                <button class="upload-btn" id="uploadBtn" disabled>
+			                    <i class="fas fa-upload"></i> Upload PDF
+			                </button>
+			                <span class="file-name" id="fileName">No file selected</span>
+			            </div>
+        </div>
+
+        
+        <!-- Loading -->
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            <p>Processing document...</p>
+        </div>
+        
+        <!-- Preview Section -->
+        <div class="section preview-section" id="previewSection">
+            <div class="section-title">Cropped Images</div>
+            <div class="preview-container" id="previewContainer">
+                <!-- Preview boxes will be added here -->
+            </div>
+        </div>
+        
+        <!-- Reset Button -->
+        <div style="text-align: center;">
+            <button class="reset-btn" id="resetBtn">
+                <i class="fas fa-redo"></i> Reset
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const documentTypeRadios = document.querySelectorAll('input[name="documentType"]');
+        const pdfFileInput = document.getElementById('pdfFile');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const fileName = document.getElementById('fileName');
+        const loading = document.getElementById('loading');
+        const previewSection = document.getElementById('previewSection');
+        const previewContainer = document.getElementById('previewContainer');
+        const status = document.getElementById('status');
+        const resetBtn = document.getElementById('resetBtn');
+        
+        let currentFile = null;
+        let croppedImages = [];
+        
+        // Event Listeners
+        documentTypeRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.checked) {
+                    uploadBtn.disabled = false;
+                    showStatus('Document type selected: ' + getDocumentTypeLabel(this.value), 'info');
+                }
+            });
+        });
+        
+        uploadBtn.addEventListener('click', function() {
+            pdfFileInput.click();
+        });
+        
+        pdfFileInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                currentFile = this.files[0];
+                fileName.textContent = currentFile.name;
+                
+                // Check if document type is selected
+                const selectedType = getSelectedDocumentType();
+                if (!selectedType) {
+                    showStatus('Please select document type first', 'error');
+                    this.value = '';
+                    currentFile = null;
+                    fileName.textContent = 'No file selected';
+                    return;
+                }
+                
+                // Upload and process
+                processDocument();
+            }
+        });
+        
+        resetBtn.addEventListener('click', resetAll);
+        
+        // Functions
+        function getSelectedDocumentType() {
+            for (const radio of documentTypeRadios) {
+                if (radio.checked) {
+                    return radio.value;
+                }
+            }
+            return null;
+        }
+        
+        function getDocumentTypeLabel(value) {
+            switch(value) {
+                case 'AADHAR_CARD': return 'Aadhar Card';
+                case 'VOTER_ID': return 'Voter ID';
+                case 'PAN_CARD': return 'PAN Card';
+                default: return 'Unknown';
+            }
+        }
+        
+        function processDocument() {
+            const documentType = getSelectedDocumentType();
+            if (!documentType || !currentFile) {
+                showStatus('Please select document type and upload PDF', 'error');
+                return;
+            }
+            
+            // Show loading
+            loading.style.display = 'block';
+            previewSection.style.display = 'none';
+            
+            const formData = new FormData();
+            formData.append('file', currentFile);
+            formData.append('documentType', documentType);
+            
+            fetch('/crop-document', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                loading.style.display = 'none';
+                
+                if (data.success) {
+                    croppedImages = data.images || [];
+                    displayPreviews(croppedImages);
+                    showStatus('Document processed successfully', 'success');
+                } else {
+                    showStatus(data.message || 'Failed to process document', 'error');
+                    clearPreviews();
+                }
+            })
+            .catch(error => {
+                loading.style.display = 'none';
+                showStatus('Error: ' + error.message, 'error');
+                clearPreviews();
+            });
+        }
+        
+        function displayPreviews(images) {
+            if (!images || images.length === 0) {
+                clearPreviews();
+                return;
+            }
+            
+            previewContainer.innerHTML = '';
+            previewSection.style.display = 'block';
+            
+            images.forEach((image, index) => {
+                const previewBox = document.createElement('div');
+                previewBox.className = 'preview-box';
+                previewBox.innerHTML = `
+                    <img src="${image.imageUrl}?t=${Date.now()}" alt="${image.displayName}">
+                    <div class="file-name-edit">
+                        <input type="text" class="file-name-input" value="${image.fileName}" 
+                               id="fileNameInput${index}">
+                        <button class="update-btn" onclick="updateFileName(${index})">Update</button>
+                    </div>
+                    <button class="download-btn" onclick="downloadImage('${image.downloadUrl}')">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                `;
+                previewContainer.appendChild(previewBox);
+            });
+        }
+        
+        function updateFileName(index) {
+            if (index >= 0 && index < croppedImages.length) {
+                const input = document.getElementById(`fileNameInput${index}`);
+                const newName = input.value.trim();
+                
+                if (newName) {
+                    // Ensure .jpg extension
+                    let finalName = newName;
+                    if (!finalName.toLowerCase().endsWith('.jpg') && 
+                        !finalName.toLowerCase().endsWith('.jpeg')) {
+                        finalName += '.jpg';
+                        input.value = finalName;
+                    }
+                    
+                    // Update in the array
+                    croppedImages[index].fileName = finalName;
+                    croppedImages[index].downloadUrl = croppedImages[index].downloadUrl.replace(
+                        /originalName=[^&]*/,
+                        'originalName=' + encodeURIComponent(finalName)
+                    );
+                    
+                    showStatus('File name updated', 'success');
+                }
+            }
+        }
+        
+        function downloadImage(downloadUrl) {
+            window.open(downloadUrl, '_blank');
+        }
+        
+        function clearPreviews() {
+            previewContainer.innerHTML = '';
+            previewSection.style.display = 'none';
+            croppedImages = [];
+        }
+        
+        function resetAll() {
+            // Clear radio buttons
+            documentTypeRadios.forEach(radio => {
+                radio.checked = false;
+            });
+            
+            // Clear file input
+            pdfFileInput.value = '';
+            currentFile = null;
+            fileName.textContent = 'No file selected';
+            uploadBtn.disabled = true;
+            
+            // Hide previews
+            loading.style.display = 'none';
+            clearPreviews();
+            
+            // Clear status
+            status.className = 'status';
+            status.style.display = 'none';
+            
+            showStatus('Reset completed', 'info');
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 2000);
+        }
+        
+        function showStatus(message, type) {
+            status.textContent = message;
+            status.className = 'status ' + type;
+            status.style.display = 'block';
+            
+            // Auto hide success messages after 3 seconds
+            if (type === 'success') {
+                setTimeout(() => {
+                    status.style.display = 'none';
+                }, 3000);
+            }
+        }
+    </script>
+</body>
+</html>
